@@ -1,6 +1,6 @@
 from selenium.webdriver.support.select import Select
 from model.project import Project
-
+from fixture.session import SessionHelper
 
 
 
@@ -11,9 +11,15 @@ class ProjectHelper:
 
     def create_poject(self,project):
         wd = self.app.wd
+
         self.open_projects_page()
         self.open_project_addform()
         self.fill_project_form(project)
+        wd.find_element_by_xpath("//input[@value='Add Project']").click()
+
+        wd.implicitly_wait(5)
+        wd.find_element_by_css_selector("td.login-info-left")
+        print("project added")
 
     def open_projects_page(self):
         wd = self.app.wd
@@ -26,43 +32,40 @@ class ProjectHelper:
 
     def fill_project_form(self, project):
         wd = self.app.wd
+
+        # -----------------------------
+        p_status_list = ["development","release", "stable", "obsolete"]
+        if project.status not in p_status_list:
+            project.status = "stable"
+        wd.find_element_by_css_selector("select[name=\"status\"]").click()
+        Select(wd.find_element_by_name("status")).select_by_visible_text(project.status)
+        index = p_status_list.index(project.status)+1
+        wd.find_element_by_xpath("//option[%s]" % str(index)).click()
+        #-----------------------------
         if not project.name:
-            project.name=""
+            project.name = "qqq1"
         wd.find_element_by_name("name").click()
         wd.find_element_by_name("name").clear()
         wd.find_element_by_name("name").send_keys(project.name)
-        if project.name:
-            wd.find_element_by_css_selector("select[name=\"status\"]").click()
-            Select(wd.find_element_by_name("status")).select_by_visible_text(project.name)
-            wd.find_element_by_xpath("//option[2]").click()
-        if 
-        driver.find_element_by_css_selector("input[name=\"inherit_global\"]").click()
-        driver.find_element_by_name("view_state").click()
-        Select(driver.find_element_by_name("view_state")).select_by_visible_text("private")
-        driver.find_element_by_css_selector("select[name=\"view_state\"] > option[value=\"50\"]").click()
-        driver.find_element_by_name("description").click()
-        driver.find_element_by_name("description").clear()
-        driver.find_element_by_name("description").send_keys("asdfg")
+        # -----------------------------
+        if not project.inherit_global:
+            wd.find_element_by_css_selector("input[name=\"inherit_global\"]").click()
+        # -----------------------------
+        if project.view_state == "private":
+            #wd.find_element_by_name("view_state").click()
+            #Select(wd.find_element_by_name("view_state")).select_by_visible_text("private")
+            wd.find_element_by_css_selector("select[name=\"view_state\"] > option[value=\"50\"]").click()
+        # -----------------------------
 
-        if not group.name:
-            group.name=""
-        wd.find_element_by_name("group_name").clear()
-        wd.find_element_by_name("group_name").send_keys(group.name)
-        if group.header:
-            wd.find_element_by_name("group_header").clear()
-            wd.find_element_by_name("group_header").send_keys(group.header)
-        if group.footer:
-            wd.find_element_by_name("group_footer").clear()
-            wd.find_element_by_name("group_footer").send_keys(group.footer)
+        if not project.description:
+            project.description = "no description"
+        wd.find_element_by_name("description").click()
+        wd.find_element_by_name("description").clear()
+        wd.find_element_by_name("description").send_keys(project.description)
 
 
 
-
-
-
-
-
-
+#-------------------------------------------------------------------------------------------------------------
     def return_to_groups_page(self):
         wd = self.app.wd
         wd.find_element_by_link_text("groups").click()

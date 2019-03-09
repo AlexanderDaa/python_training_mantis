@@ -10,6 +10,7 @@ def random_string(prefix, maxlen):
 
 
 def test_add_project(app):
+    app.session.ensure_login(username=app.config['webadmin']["username"], password=app.config['webadmin']["password"])
     name_list = app.projects.get_project_name_list()
     name = random_string("pr_", 10)
     while name in name_list:

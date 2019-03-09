@@ -9,6 +9,7 @@ def random_string(prefix, maxlen):
 
 
 def test_del_project(app):
+    app.session.ensure_login(username=app.config['webadmin']["username"], password=app.config['webadmin']["password"])
     project_list = app.projects.get_project_list()
     if len(project_list) ==0:
         name = random_string("pr_", 10)

@@ -83,3 +83,18 @@ class ProjectHelper:
         #print(name_list)
         return name_list
 
+    def del_project(self,project):
+        self.select_project(project)
+        self.click_del_confdel_project()
+
+    def select_project(self,project):
+        wd = self.app.wd
+        wd.find_element_by_xpath("//a[contains(text(),'%s')]" % project.name).click()
+
+    def click_del_confdel_project(self):
+        wd = self.app.wd
+        wd.find_element_by_xpath("//input[@value='Update Project']")
+        wd.find_element_by_xpath("//input[@value='Delete Project']").click()
+        wd.find_elements_by_xpath("//*[contains(text(), 'Are you sure')]")
+        wd.find_element_by_xpath("//input[@value='Delete Project']").click()
+

@@ -21,9 +21,9 @@ class SignupHelper:
         wd.find_element_by_name("password").send_keys(password)
         time.sleep(1)
         wd.find_element_by_name("password_confirm").send_keys(password)
-        time.sleep(1)
-        wd.find_element_by_name("password").clear
-        wd.find_element_by_name("password").send_keys(password)
+        #time.sleep(1)
+        #wd.find_element_by_name("password").clear
+        #wd.find_element_by_name("password").send_keys(password)
         time.sleep(1)
         wd.find_element_by_css_selector("input[value='Update User']").click()
 

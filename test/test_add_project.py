@@ -10,7 +10,9 @@ def random_string(prefix, maxlen):
 
 
 def test_add_project(app):
-    app.session.ensure_login(username=app.config['webadmin']["username"], password=app.config['webadmin']["password"])
+    username = app.config['webadmin']["username"]
+    password = app.config['webadmin']["password"]
+    app.session.ensure_login(username, password)
     name_list = app.projects.get_project_name_list()
     name = random_string("pr_", 10)
     while name in name_list:
@@ -31,3 +33,6 @@ def test_add_project(app):
     #print(sorted(new_name_list))
     assert sorted(name_list) == sorted(new_name_list)
 
+    #попробуем получить список проектов через soap
+    soap_proj_list = app.soap.get_soap_project_list(username, password)
+    print(soap_proj_list)

@@ -25,6 +25,7 @@ def test_add_project(app):
     #print(status)
     #print(view_state)
     project_to_add = Project(name=name, status=status, view_state=view_state, description=random_string("", 10))
+    soap_proj_list_old = app.soap.get_soap_project_list(username, password)
     app.projects.create_project(project_to_add)
     new_name_list = app.projects.get_project_name_list()
     assert len(name_list)+1 == len(new_name_list)
@@ -32,7 +33,9 @@ def test_add_project(app):
     #print(sorted(name_list))
     #print(sorted(new_name_list))
     assert sorted(name_list) == sorted(new_name_list)
-
-    #попробуем получить список проектов через soap
-    soap_proj_list = app.soap.get_soap_project_list(username, password)
-    print(soap_proj_list)
+    soap_proj_list_new = app.soap.get_soap_project_list(username, password)
+    #assert len(soap_proj_list_old)+1 == len(soap_proj_list_new)
+    soap_proj_list_old.append(project_to_add.name)
+    assert sorted(soap_proj_list_old) == sorted(soap_proj_list_new)
+    #print(sorted(soap_proj_list_old))
+    #print(sorted(soap_proj_list_new))

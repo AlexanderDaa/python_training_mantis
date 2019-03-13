@@ -19,6 +19,8 @@ class Application:
         else:
             raise ValueError("Unrecognized browser %s" % browser)
         self.base_url = config["web"]["baseUrl"]
+        self.username = config['webadmin']["username"]
+        self.password = config['webadmin']["password"]
         self.config = config
         self.session = SessionHelper(self)
         self.projects = ProjectHelper(self)
